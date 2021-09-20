@@ -1,5 +1,6 @@
 package JavaInAction.chap16.v1;
 
+
 import static JavaInAction.chap16.v1.Util.delay;
 
 import java.util.Random;
@@ -7,7 +8,6 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Future;
 
 public class Shop {
-
     private final String name;
     private final Random random;
 
@@ -25,25 +25,17 @@ public class Shop {
         return random.nextDouble() * product.charAt(0) + product.charAt(1);
     }
 
-    //    public Future<Double> getPriceAsync(String product) {
-    //        CompletableFuture<Double> futurePrice = new CompletableFuture<>();
-    //        new Thread(() -> {
-    //            try {
-    //                double price = calculatePrice(product);
-    //                futurePrice.complete(price);
-    //            } catch (Exception e) {
-    //                futurePrice.completeExceptionally(e);
-    //            }
-    //        }).start();
-    //        return futurePrice;
-    //    }
-
     public Future<Double> getPriceAsync(String product) {
-        return CompletableFuture.supplyAsync(() -> calculatePrice(product));
+        CompletableFuture<Double> futurePrice = new CompletableFuture<>();
+        new Thread(() -> {
+            double price = calculatePrice(product);
+            futurePrice.complete(price);
+        }).start();
+        return futurePrice;
     }
-
 
     public String getName() {
         return name;
     }
+
 }
