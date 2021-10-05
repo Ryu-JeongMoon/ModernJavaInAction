@@ -6,15 +6,17 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 public class FilteringApples {
 
-    public static void main(String[] args) {
+    public static List<Apple> inventory = Arrays.asList(new Apple(79, Color.GREEN), new Apple(81, Color.GREEN),
+        new Apple(79, Color.RED), new Apple(81, Color.RED), new Apple(151, Color.GREEN),
+        new Apple(149, Color.GREEN), new Apple(151, Color.RED), new Apple(149, Color.RED));
 
-        List<Apple> inventory = Arrays.asList(new Apple(79, Color.GREEN), new Apple(81, Color.GREEN),
-            new Apple(79, Color.RED), new Apple(81, Color.RED), new Apple(151, Color.GREEN),
-            new Apple(149, Color.GREEN), new Apple(151, Color.RED), new Apple(149, Color.RED));
+    public static void main(String[] args) {
 
         //List<Apple> greenApples = filterApplesByColor(inventory, Color.GREEN);
 
@@ -67,7 +69,7 @@ public class FilteringApples {
         return result;
     }
 
-    enum Color {RED, GREEN}
+    public enum Color {RED, GREEN}
 
     public interface ApplePredicate {
 
@@ -120,11 +122,16 @@ public class FilteringApples {
     }
 
     @Data
+    @NoArgsConstructor
     @AllArgsConstructor
     public static class Apple {
 
         private Integer weight = 0;
         private Color color;
+
+        public Apple(Integer weight) {
+            this.weight = weight;
+        }
     }
 
 }
