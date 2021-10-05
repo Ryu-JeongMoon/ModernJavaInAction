@@ -15,18 +15,18 @@
   - Predicate interface를 만들고 다형성 이용해 넣어줄지 <u>DRY 위반</u>
   - 람다로 넣어줄지 <u>재사용 어려우나 가독성 좋음</u>
 
-##Enum Class  == or equals()
+## Enum Class  == or equals()
 Enum은 상수를 사용, 인스턴스가 하나임을 보장한다 equals()를 사용할 필요 없이 == 을 사용하면 된다 equals()도 결국 == 을 사용하는 것이고 비교하는 값에 null이 들어오면 NPE 터질 가능성이 생긴다
 <br>ex) null.equals(Enum.~) NPE O, Enum.~.equals(null) NPE X
 
-##Strategy Pattern
+## Strategy Pattern
 Algorithm family 에서 하나의 algorithm 선택해서 적용하는 기법
 <br>Runtime에 적용될 메서드가 다른 경우 사용 (다형성 이용)
 
-##Abstraction for List type
+## Abstraction for List type
 타입 추상화, Summary.java 참고
 
-##Sort by Comparator
+## Sort by Comparator
 Comparable vs Comparator
 - Comparable compareTo(T o) 자기 자신과 매개변수 객체를 비교 
 - Comparator compare(T o1, T o2) 두 매개변수 객체를 비교
