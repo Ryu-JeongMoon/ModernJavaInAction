@@ -6,9 +6,9 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.ToString;
 
-@AllArgsConstructor
-@ToString
 @Getter
+@ToString
+@AllArgsConstructor
 public class Dish {
 
     private final String name;
