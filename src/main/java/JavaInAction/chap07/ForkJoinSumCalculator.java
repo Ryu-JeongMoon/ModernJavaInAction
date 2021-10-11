@@ -7,10 +7,10 @@ import java.util.stream.LongStream;
 
 public class ForkJoinSumCalculator extends RecursiveTask<Long> {
 
+    public static final long THRESHOLD = 10000L;
     private final long[] numbers;
     private final int start;
     private final int end;
-    public static final long THRESHOLD = 10000L;
 
     public ForkJoinSumCalculator(long[] numbers) {
         this(numbers, 0, numbers.length);
@@ -20,6 +20,13 @@ public class ForkJoinSumCalculator extends RecursiveTask<Long> {
         this.numbers = numbers;
         this.start = start;
         this.end = end;
+    }
+
+    public static long forkJoinSum(long n) {
+        long[] numbers = LongStream.rangeClosed(1, n)
+            .toArray();
+        ForkJoinTask<Long> task = new ForkJoinSumCalculator(numbers);
+        return new ForkJoinPool().invoke(task);
     }
 
     @Override
@@ -47,12 +54,5 @@ public class ForkJoinSumCalculator extends RecursiveTask<Long> {
             sum += numbers[i];
         }
         return sum;
-    }
-
-    public static long forkJoinSum(long n) {
-        long[] numbers = LongStream.rangeClosed(1, n)
-            .toArray();
-        ForkJoinTask<Long> task = new ForkJoinSumCalculator(numbers);
-        return new ForkJoinPool().invoke(task);
     }
 }

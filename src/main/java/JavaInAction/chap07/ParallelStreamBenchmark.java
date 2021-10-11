@@ -21,14 +21,14 @@ public class ParallelStreamBenchmark {
 
     private static final long N = 10_000_000L;
 
-    //    @Benchmark
+//        @Benchmark
     public long sequentialSum() {
         return Stream.iterate(1L, i -> i + 1)
             .limit(N)
             .reduce(0L, Long::sum);
     }
 
-    //    @Benchmark
+//    @Benchmark
     public long iterativeSum() {
         long result = 0;
         for (int i = 0; i <= N; i++) {
@@ -37,12 +37,20 @@ public class ParallelStreamBenchmark {
         return result;
     }
 
-    //    @Benchmark
+//    @Benchmark
+    public long parallelSum() {
+        return Stream.iterate(1L, i -> i + 1)
+            .limit(N)
+            .parallel()
+            .reduce(0L, Long::sum);
+    }
+
+//        @Benchmark
     public long rangedSum() {
         return LongStream.range(1, N).reduce(0L, Long::sum);
     }
 
-    @Benchmark
+        @Benchmark
     public long parallelRangedSum() {
         return LongStream.rangeClosed(1, N)
             .parallel()
