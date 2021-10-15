@@ -1,5 +1,6 @@
 package JavaInAction.chap04;
 
+import JavaInAction.chap06.Summary2.CaloricLevel;
 import java.util.Arrays;
 import java.util.List;
 import lombok.AllArgsConstructor;
@@ -23,6 +24,15 @@ public class Dish {
     private final boolean vegetarian;
     private final int calories;
     private final Type type;
+
+    public CaloricLevel getCaloricLevel() {
+        if (this.getCalories() <= 400) {
+            return CaloricLevel.DIET;
+        } else if (this.getCalories() <= 700) {
+            return CaloricLevel.NORMAL;
+        }
+        return CaloricLevel.FAT;
+    }
 
     public enum Type {MEAT, FISH, OTHER}
 }
