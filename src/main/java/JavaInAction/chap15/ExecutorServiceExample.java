@@ -11,7 +11,6 @@ import java.util.concurrent.Future;
 public class ExecutorServiceExample {
 
     public static void main(String[] args) throws ExecutionException, InterruptedException {
-
         int x = 1337;
         long start = System.nanoTime();
 
