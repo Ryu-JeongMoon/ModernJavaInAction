@@ -1,13 +1,10 @@
 package JavaInAction.chap16;
 
-import static JavaInAction.chap16.v1.Util.delay;
-import static modernjavainaction.chap16.Util.format;
+import static JavaInAction.chap16.v1.Util.format;
 
+import JavaInAction.chap16.v1.Util;
 import java.util.Random;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.Future;
-import modernjavainaction.chap16.Discount;
-import modernjavainaction.chap16.Util;
+import modernjavainaction.chap16.Discount.Code;
 
 public class Shop {
 
@@ -21,13 +18,13 @@ public class Shop {
 
     public String getPrice(String product) {
         double price = calculatePrice(product);
-        modernjavainaction.chap16.Discount.Code code = modernjavainaction.chap16.Discount.Code.values()[random.nextInt(
-            Discount.Code.values().length)];
+        Code code = Code.values()[random.nextInt(Code.values().length)];
         return name + ":" + price + ":" + code;
     }
 
     public double calculatePrice(String product) {
-        Util.delay();
+//        Util.delay();
+        Util.randomDelay();
         return format(random.nextDouble() * product.charAt(0) + product.charAt(1));
     }
 

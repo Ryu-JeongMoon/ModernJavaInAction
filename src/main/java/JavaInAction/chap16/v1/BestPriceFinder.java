@@ -1,5 +1,8 @@
 package JavaInAction.chap16.v1;
 
+import static JavaInAction.chap16.ExchangeService.DEFAULT_RATE;
+import static JavaInAction.chap16.ExchangeService.getRate;
+
 import JavaInAction.chap16.ExchangeService;
 import JavaInAction.chap16.ExchangeService.Money;
 import java.util.ArrayList;
@@ -19,8 +22,9 @@ import java.util.stream.Stream;
 public class BestPriceFinder {
 
     private final List<Shop> shops = Arrays.asList(new Shop("BestPrice"), new Shop("LetsSaveBig"),
-        new Shop("MyFavoriteShop"), new Shop("BuyItAll")/*,
-      new Shop("ShopEasy")*/);
+        new Shop("MyFavoriteShop"), new Shop("BuyItAll"), new Shop("ShopEasy"), new Shop("Hello"),
+        new Shop("World8"), new Shop("Java7"), new Shop("PANDA3"), new Shop("Cool5")
+    );
 
     private final Executor executor = Executors.newFixedThreadPool(shops.size(), (Runnable r) -> {
         Thread t = new Thread(r);
@@ -42,14 +46,21 @@ public class BestPriceFinder {
 
     public List<String> findPricesFuture(String product) {
         List<CompletableFuture<String>> priceFutures = shops.stream()
-            .map(shop -> CompletableFuture.supplyAsync(() -> shop.getName() + " price is " + shop.getPrice(product),
-                executor))
+            .map(shop -> CompletableFuture.supplyAsync(() -> shop.getName() + " price is " + shop.getPrice(product), executor))
             .collect(Collectors.toList());
 
-        List<String> prices = priceFutures.stream()
+        return priceFutures.stream()
             .map(CompletableFuture::join)
             .collect(Collectors.toList());
-        return prices;
+    }
+
+    // stream 의 게으른 특성 때문에 요청과 join 이 함께 이루어져 동기적 & 순차적으로 진행됨
+    // 게으른 특성을 피하기 위해서는 요청과 join 을 분리해야 함
+    public List<String> findPricesLazyFuture(String product) {
+        return shops.stream()
+            .map(shop -> CompletableFuture.supplyAsync(() -> shop.getName() + " price is " + shop.getPrice(product), executor))
+            .map(CompletableFuture::join)
+            .collect(Collectors.toList());
     }
 
     public List<String> findPricesInUSD(String product) {
@@ -58,11 +69,9 @@ public class BestPriceFinder {
             // 예제 10-20 시작.
             // 아래 CompletableFuture::join와 호환되도록 futurePriceInUSD의 형식만 CompletableFuture로 바꿈.
             CompletableFuture<Double> futurePriceInUSD = CompletableFuture.supplyAsync(() -> shop.getPrice(product))
-                .thenCombine(CompletableFuture.supplyAsync(() -> modernjavainaction.chap16.ExchangeService.getRate(
-                            modernjavainaction.chap16.ExchangeService.Money.EUR, modernjavainaction.chap16.ExchangeService.Money.USD))
+                .thenCombine(CompletableFuture.supplyAsync(() -> getRate(Money.EUR, Money.USD))
                         // 자바 9에 추가된 타임아웃 관리 기능
-                        .completeOnTimeout(modernjavainaction.chap16.ExchangeService.DEFAULT_RATE, 1, TimeUnit.SECONDS),
-                    (price, rate) -> price * rate)
+                        .completeOnTimeout(DEFAULT_RATE, 1, TimeUnit.SECONDS), (price, rate) -> price * rate)
                 // 자바 9에 추가된 타임아웃 관리 기능
                 .orTimeout(3, TimeUnit.SECONDS);
             priceFutures.add(futurePriceInUSD);
@@ -83,8 +92,8 @@ public class BestPriceFinder {
             final Future<Double> futureRate = executor.submit(new Callable<Double>() {
                 @Override
                 public Double call() {
-                    return modernjavainaction.chap16.ExchangeService.getRate(
-                        modernjavainaction.chap16.ExchangeService.Money.EUR, modernjavainaction.chap16.ExchangeService.Money.USD);
+                    return getRate(
+                        Money.EUR, Money.USD);
                 }
             });
             Future<Double> futurePriceInUSD = executor.submit(new Callable<Double>() {
@@ -116,7 +125,7 @@ public class BestPriceFinder {
         for (Shop shop : shops) {
             // 루프에서 상점 이름에 접근할 수 있도록 동작을 추가함. 결과적으로 CompletableFuture<String> 인스턴스를 사용할 수 있음.
             CompletableFuture<String> futurePriceInUSD = CompletableFuture.supplyAsync(() -> shop.getPrice(product))
-                .thenCombine(CompletableFuture.supplyAsync(() -> ExchangeService.getRate(
+                .thenCombine(CompletableFuture.supplyAsync(() -> getRate(
                         ExchangeService.Money.EUR, ExchangeService.Money.USD)),
                     (price, rate) -> price * rate)
                 .thenApply(price -> shop.getName() + " price is " + price);
@@ -132,7 +141,7 @@ public class BestPriceFinder {
         // 루프를 매핑 함수로 바꿈...
         Stream<CompletableFuture<String>> priceFuturesStream = shops.stream()
             .map(shop -> CompletableFuture.supplyAsync(() -> shop.getPrice(product))
-                .thenCombine(CompletableFuture.supplyAsync(() -> ExchangeService.getRate(Money.EUR, Money.USD)),
+                .thenCombine(CompletableFuture.supplyAsync(() -> getRate(Money.EUR, Money.USD)),
                     (price, rate) -> price * rate)
                 .thenApply(price -> shop.getName() + " price is " + price));
         // 하지만 합치기 전에 연산이 실행되도록 CompletableFuture를 리스트로 모음

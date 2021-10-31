@@ -5,13 +5,13 @@ import java.util.function.Supplier;
 
 public class BestPriceFinderMain {
 
-    private static final JavaInAction.chap16.BestPriceFinder bestPriceFinder = new JavaInAction.chap16.BestPriceFinder();
+    private static final BestPriceFinder bestPriceFinder = new BestPriceFinder();
 
     public static void main(String[] args) {
 //        execute("sequential", () -> bestPriceFinder.findPricesSequential("myPhone27S"));
-        execute("parallel", () -> bestPriceFinder.findPricesParallel("myPhone27S"));
-//        execute("sequential", () -> bestPriceFinder.findPrices("myPhone27S"));
-
+//        execute("parallel", () -> bestPriceFinder.findPricesParallel("myPhone27S"));
+        execute("future", () -> bestPriceFinder.findPricesFuture("myPhone27S"));
+//        execute("lazyFuture", () -> bestPriceFinder.findPricesLazyFuture("myPhone27S"));
     }
 
     private static void execute(String message, Supplier<List<String>> supplier) {
