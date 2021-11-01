@@ -5,8 +5,7 @@ import java.util.concurrent.Flow.Publisher;
 public class MainCelsius {
 
     public static void main(String[] args) {
-        getCelsiusTemperature("Seoul")
-            .subscribe(new TempSubscriber());
+        getCelsiusTemperature("Seoul").subscribe(new TempSubscriber());
     }
 
     public static Publisher<TempInfo> getCelsiusTemperature(String town) {

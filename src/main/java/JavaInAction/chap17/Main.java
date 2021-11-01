@@ -9,7 +9,6 @@ public class Main {
     }
 
     private static Publisher<TempInfo> getTemperatures(String town) {
-        return subscriber -> subscriber.onSubscribe(
-            new TempSubscription(subscriber, town));
+        return subscriber -> subscriber.onSubscribe(new TempSubscription(subscriber, town));
     }
 }
