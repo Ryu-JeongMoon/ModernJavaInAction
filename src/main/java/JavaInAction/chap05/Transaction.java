@@ -9,7 +9,7 @@ import lombok.ToString;
 @ToString
 public class Transaction {
 
-    private final Trader trader;
-    private final int year;
-    private final int value;
+  private final Trader trader;
+  private final int year;
+  private final int value;
 }

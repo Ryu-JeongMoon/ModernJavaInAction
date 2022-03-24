@@ -2,5 +2,5 @@ package JavaInAction.chap09;
 
 public interface ValidationStrategy {
 
-    boolean execute(String s);
+  boolean execute(String s);
 }

@@ -1,39 +1,40 @@
 package JavaInAction.chap09;
 
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
+
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
 
 @ToString
 @EqualsAndHashCode
 public class Point {
 
-    public static final Comparator<Point> compareXAndThenY = Comparator.comparing(Point::getX).thenComparing(Point::getY);
-    private final int x;
-    private final int y;
+  public static final Comparator<Point> compareXAndThenY = Comparator.comparing(Point::getX).thenComparing(Point::getY);
+  private final int x;
+  private final int y;
 
-    public Point(int x, int y) {
-        this.x = x;
-        this.y = y;
-    }
+  public Point(int x, int y) {
+    this.x = x;
+    this.y = y;
+  }
 
-    public int getX() {
-        return x;
-    }
+  public static List<Point> moveAllPointsRightBy(List<Point> points, int x) {
+    return points.stream()
+        .map(p -> new Point(p.getX() + x, p.getY()))
+        .collect(Collectors.toList());
+  }
 
-    public int getY() {
-        return y;
-    }
+  public int getX() {
+    return x;
+  }
 
-    public Point moveRightBy(int x) {
-        return new Point(this.x + x, y);
-    }
+  public int getY() {
+    return y;
+  }
 
-    public static List<Point> moveAllPointsRightBy(List<Point> points, int x) {
-        return points.stream()
-            .map(p -> new Point(p.getX() + x, p.getY()))
-            .collect(Collectors.toList());
-    }
+  public Point moveRightBy(int x) {
+    return new Point(this.x + x, y);
+  }
 }

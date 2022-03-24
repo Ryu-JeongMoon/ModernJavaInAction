@@ -9,6 +9,6 @@ import lombok.ToString;
 @ToString
 public class Trader {
 
-    private final String name;
-    private final String city;
+  private final String name;
+  private final String city;
 }
